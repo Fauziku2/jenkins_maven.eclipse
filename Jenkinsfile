@@ -24,5 +24,16 @@ pipeline {
 				sh "mvn install -DskipTests"
 			}
 		}
+		stage('sonar') {
+            environment {
+                scannerHome = tool 'sonarqube-scanner';
+            }
+            steps {
+				echo "Start sonar"
+              	withSonarQubeEnv(credentialsId: 'sonarqube_token', installationName: 'sonarqube_server') {
+                sh "${scannerHome}/bin/sonar-scanner"
+              }
+            }
+        }
 	}
 }
