@@ -26,13 +26,12 @@ pipeline {
 		}
 		stage('sonar') {
             environment {
-                scannerHome = tool 'sonarqube-scanner';
+                SONAR_HOST_URL = "http://localhost:9000"
+                SONAR_AUTH_TOKEN = credentials("sonarqube_token")
             }
             steps {
 				echo "Start sonar"
-              	withSonarQubeEnv(credentialsId: 'sonarqube_token', installationName: 'sonarqube_server') {
-                sh "${scannerHome}/bin/sonar-scanner"
-              }
+              	sh "mvn sonar:sonar -Dsonar.projectKey=maven-project-jenkins-lab -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
             }
         }
 	}
