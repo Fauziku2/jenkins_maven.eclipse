@@ -38,7 +38,7 @@ pipeline {
 			steps {
 				deploy adapters: [tomcat9(url: "http://localhost:8090/", credentialsId: "tomcat")],
 				war: '**/*.war',
-				contextPath: "pipeline"
+				contextPath: "jenkins_maven.eclipse"
 			}
 		}
 	}
