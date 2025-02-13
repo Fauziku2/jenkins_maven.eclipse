@@ -34,10 +34,15 @@ pipeline {
               	sh "mvn sonar:sonar -Dsonar.projectKey=maven-project-jenkins-lab -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
             }
         }
+        stage('archive artifact') {
+			steps {
+				archiveArtifacts artifacts: 'target/.*war'
+			}
+		}
         stage('deployment') {
 			steps {
 				deploy adapters: [tomcat9(url: "http://localhost:8090/", credentialsId: "tomcat")],
-				war: '**/*.war',
+				war: 'target/*.war',
 				contextPath: "jenkins_maven.eclipse"
 			}
 		}
