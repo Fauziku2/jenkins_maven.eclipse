@@ -34,25 +34,9 @@ pipeline {
               	sh "mvn sonar:sonar -Dsonar.projectKey=maven-project-jenkins-lab -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
             }
         }
-        stage('notification') {
-			steps {
-				emailext(
-					subject: 'Job Completed',
-					body: 'Jenkins pipeline job for maven build job completed',
-					to: 'fauzi87sg@gmail.com'
-				)
-			}
-		}
-        stage('archive artifact') {
-			steps {
-				archiveArtifacts artifacts: '**/*.war'
-			}
-		}
         stage('deployment') {
 			steps {
-				deploy adapters: [tomcat9(url: "http://localhost:8090/", credentialsId: "tomcat")],
-				war: '**/*.war',
-				contextPath: "jenkins_maven.eclipse"
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://localhost:8090')], contextPath: 'jenkins_maven.eclipse', war: '**/*.war'
 			}
 		}
 	}
