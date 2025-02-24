@@ -55,16 +55,6 @@ pipeline {
                 }
              }
  		}
-		stage('sonar') {
-            environment {
-                SONAR_HOST_URL = "http://localhost:9000"
-                SONAR_AUTH_TOKEN = credentials("sonarqube_token")
-            }
-            steps {
-				echo "Start sonar"
-              	sh "mvn sonar:sonar -Dsonar.projectKey=maven-project-jenkins-lab -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-            }
-        }
         stage('deployment') {
 			steps {
 				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://localhost:8090')], contextPath: null, war: '**/*.war'
